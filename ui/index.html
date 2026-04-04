@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaria Cell Classification — Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        header {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 { font-size: 22px; }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .online  { background: #27ae60; color: white; }
+        .offline { background: #e74c3c; color: white; }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #1a1a2e;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 10px;
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        button {
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        button:hover { background: #16213e; }
+
+        .result-box {
+            margin-top: 16px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 14px;
+            min-height: 60px;
+        }
+
+        .parasitized { border-left: 4px solid #e74c3c; }
+        .uninfected  { border-left: 4px solid #27ae60; }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f2f5;
+            font-size: 14px;
+        }
+
+        .metric-row:last-child { border-bottom: none; }
+
+        .metric-value { font-weight: bold; color: #1a1a2e; }
+
+        .retrain-status {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Malaria Cell Classification — Monitoring Dashboard</h1>
+    <span class="status-badge offline" id="statusBadge">Checking...</span>
+</header>
+
+<div class="container">
+    <div class="grid">
+
+        <!-- Model Status -->
+        <div class="card">
+            <h2>Model Status</h2>
+            <div id="modelMetrics">
+                <div class="metric-row">
+                    <span>API Status</span>
+                    <span class="metric-value" id="apiStatus">—</span>
+                </div>
+                <div class="metric-row">
+                    <span>Model</span>
+                    <span class="metric-value" id="modelName">—</span>
+                </div>
+                <div class="metric-row">
+                    <span>Model Status</span>
+                    <span class="metric-value" id="modelStatus">—</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predict -->
+        <div class="card">
+            <h2>Predict a Single Cell Image</h2>
+            <input type="file" id="predictFile" accept="image/*">
+            <img id="previewImg" class="preview-img" alt="Preview">
+            <button onclick="predict()">Run Prediction</button>
+            <div class="result-box" id="predictResult">Upload an image and click Run Prediction.</div>
+        </div>
+
+        <!-- Upload Data -->
+        <div class="card">
+            <h2>Upload Training Data</h2>
+            <select id="uploadLabel">
+                <option value="Parasitized">Parasitized</option>
+                <option value="Uninfected">Uninfected</option>
+            </select>
+            <input type="file" id="uploadFiles" accept="image/*" multiple>
+            <button onclick="uploadData()">Upload Images</button>
+            <div class="result-box" id="uploadResult">Select a label and images to upload.</div>
+        </div>
+
+        <!-- Retrain -->
+        <div class="card">
+            <h2>Retrain Model</h2>
+            <p style="font-size:13px; color:#666; margin-bottom:16px;">
+                Upload new images first using the Upload section, then trigger retraining here.
+                Retraining runs in the background and may take several minutes.
+            </p>
+            <button onclick="retrain()">Trigger Retraining</button>
+            <div class="retrain-status" id="retrainStatus">No retraining triggered yet.</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const API = "http://localhost:8000";
+
+    async function checkHealth() {
+        try {
+            const res  = await fetch(`${API}/health`);
+            const data = await res.json();
+
+            document.getElementById("statusBadge").textContent = "Online";
+            document.getElementById("statusBadge").className   = "status-badge online";
+            document.getElementById("apiStatus").textContent   = "Online";
+            document.getElementById("modelStatus").textContent = data.model;
+
+            const metricsRes  = await fetch(`${API}/metrics`);
+            const metricsData = await metricsRes.json();
+            document.getElementById("modelName").textContent = metricsData.model;
+
+        } catch (e) {
+            document.getElementById("statusBadge").textContent = "Offline";
+            document.getElementById("statusBadge").className   = "status-badge offline";
+            document.getElementById("apiStatus").textContent   = "Offline";
+        }
+    }
+
+    async function predict() {
+        const file = document.getElementById("predictFile").files[0];
+        if (!file) {
+            document.getElementById("predictResult").textContent = "Please select an image first.";
+            return;
+        }
+
+        const preview = document.getElementById("previewImg");
+        preview.src   = URL.createObjectURL(file);
+        preview.style.display = "block";
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res  = await fetch(`${API}/predict`, { method: "POST", body: formData });
+            const data = await res.json();
+            const box  = document.getElementById("predictResult");
+            box.className = `result-box ${data.label === "Parasitized" ? "parasitized" : "uninfected"}`;
+            box.innerHTML = `
+                <strong>Prediction:</strong> ${data.label}<br>
+                <strong>Confidence:</strong> ${data.confidence}%<br>
+                <strong>File:</strong> ${data.filename}
+            `;
+        } catch (e) {
+            document.getElementById("predictResult").textContent = "Error: " + e.message;
+        }
+    }
+
+    async function uploadData() {
+        const files = document.getElementById("uploadFiles").files;
+        const label = document.getElementById("uploadLabel").value;
+
+        if (files.length === 0) {
+            document.getElementById("uploadResult").textContent = "Please select images to upload.";
+            return;
+        }
+
+        const formData = new FormData();
+        for (const file of files) formData.append("files", file);
+        formData.append("label", label);
+
+        try {
+            const res  = await fetch(`${API}/upload`, { method: "POST", body: formData });
+            const data = await res.json();
+            document.getElementById("uploadResult").textContent = data.message;
+        } catch (e) {
+            document.getElementById("uploadResult").textContent = "Error: " + e.message;
+        }
+    }
+
+    async function retrain() {
+        document.getElementById("retrainStatus").textContent = "Retraining started. This may take several minutes...";
+        try {
+            const res  = await fetch(`${API}/retrain`, { method: "POST" });
+            const data = await res.json();
+            document.getElementById("retrainStatus").textContent = data.message;
+        } catch (e) {
+            document.getElementById("retrainStatus").textContent = "Error: " + e.message;
+        }
+    }
+
+    checkHealth();
+    setInterval(checkHealth, 30000);
+</script>
+
+</body>
+</html>
