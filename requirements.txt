@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-tensorflow-cpu
+tensorflow
 scikit-learn
 numpy
 pillow
@@ -10,5 +10,3 @@ opencv-python
 matplotlib
 seaborn
 pandas
-streamlit
-requests
