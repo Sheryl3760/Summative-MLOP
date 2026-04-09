@@ -1,0 +1,38 @@
+# Virtual environments
+venv/
+ENV/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model files (if not needed in repo)
+*.h5
+*.pkl
+*.joblib
+
+# Data files (if large)
+data/
+
+# Environment variables
+.env
+.env.local
+
+# Package files
+*.egg-info/
+dist/
+build/
