@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-API_URL = "http://localhost:8000"
+API_URL = "https://summative-mlop-yuhp.onrender.com"
 
 st.set_page_config(
     page_title="Malaria Cell Classification",

@@ -20,11 +20,8 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Model files (too large for GitHub)
-*.h5
-*.pkl
+# Model files (tracked with Git LFS)
 *.joblib
-models/
 
 # Data files (if large)
 data/
