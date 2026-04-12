@@ -1,10 +1,8 @@
-# Malaria Cell Image Classification — ML Pipeline
+# Malaria Cell Image Classification
 
 ## Video Demo
 
 [Watch the Demo Here]()
-
----
 
 ## Live Application URLs
 
@@ -12,15 +10,11 @@
 - FastAPI Backend: https://summative-mlop-yuhp.onrender.com
 - API Docs: https://summative-mlop-yuhp.onrender.com/docs
 
----
-
 ## Project Description
 
 This project implements an end-to-end Machine Learning pipeline for the classification of malaria-infected blood cell images. The system uses Transfer Learning and Convolutional Neural Networks to classify microscopy images as either Parasitized or Uninfected.
 
 The solution is built on the NIH Malaria Cell Images Dataset containing 27,558 microscopy images prepared using Giemsa staining, a standard technique in malaria diagnosis. The project compares traditional machine learning approaches using Scikit-learn against deep learning approaches using TensorFlow and deploys the best model as a REST API with a Streamlit monitoring dashboard.
-
----
 
 ## Technical Stack
 
@@ -31,8 +25,6 @@ The solution is built on the NIH Malaria Cell Images Dataset containing 27,558 m
 - Containerization: Docker
 - Cloud Deployment: Render
 - Load Testing: Locust
-
----
 
 ## Model Performance
 
@@ -45,8 +37,6 @@ The solution is built on the NIH Malaria Cell Images Dataset containing 27,558 m
 | SVM            | 70.74%   | 0.7017    | 0.7213 | 0.7114   | 0.7766  |
 
 Best model: Sequential CNN with F1 Score of 0.9598
-
----
 
 ## Project Structure
 
@@ -78,16 +68,12 @@ Summative-MLOP/
     └── svm_model.pkl
 ```
 
----
-
 ## Downloading Model Files
 
 The trained model files exceed GitHub's file size limit and are hosted on Kaggle.
 Download them and place them in the models/ folder:
 
 [Download Models Here](paste-your-kaggle-link-here)
-
----
 
 ## Setup and Installation
 
@@ -133,8 +119,6 @@ streamlit run app.py
 http://localhost:8501
 ```
 
----
-
 ## Running with Docker
 
 ### Build the image
@@ -156,8 +140,6 @@ docker run -p 8000:8000 malaria-api
 docker run -p 8001:8000 malaria-api
 docker run -p 8002:8000 malaria-api
 ```
-
----
 
 ## Load Testing with Locust
 
@@ -202,8 +184,6 @@ Conclusion:
 ![Locust Charts](screenshots/locust_charts.png)
 ![Locust Logs](screenshots/locust_logs.png)
 
----
-
 ## API Endpoints
 
 | Endpoint | Method | Description                       |
@@ -214,8 +194,6 @@ Conclusion:
 | /upload  | POST   | Upload bulk images for retraining |
 | /retrain | POST   | Trigger model retraining          |
 | /metrics | GET    | Model and API metrics             |
-
----
 
 ## Dataset
 
