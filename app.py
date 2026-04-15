@@ -138,16 +138,16 @@ with tab2:
 
     with col1:
         st.subheader("Class Distribution")
-        fig, ax = plt.subplots(figsize=(6, 4))
-        classes = ["Parasitized", "Uninfected"]
-        counts  = [13779, 13779]
-        colors  = ["#d9534f", "#5cb85c"]
-        ax.bar(classes, counts, color=colors, edgecolor="black", alpha=0.85)
-        ax.set_ylabel("Number of Images")
-        ax.set_title("Image Count per Class")
-        for i, count in enumerate(counts):
-            ax.text(i, count + 100, str(count), ha="center", fontweight="bold")
-        st.pyplot(fig)
+        # fig, ax = plt.subplots(figsize=(6, 4))
+        # classes = ["Parasitized", "Uninfected"]
+        # counts  = [13779, 13779]
+        # colors  = ["#d9534f", "#5cb85c"]
+        # ax.bar(classes, counts, color=colors, edgecolor="black", alpha=0.85)
+        # ax.set_ylabel("Number of Images")
+        # ax.set_title("Image Count per Class")
+        # for i, count in enumerate(counts):
+        #     ax.text(i, count + 100, str(count), ha="center", fontweight="bold")
+        # st.pyplot(fig)
         st.caption("The dataset is perfectly balanced with 13,779 images per class.")
 
     with col2:
@@ -159,12 +159,12 @@ with tab2:
             "AUC-ROC":  [0.9895, 0.9866, 0.9833, 0.8939, 0.7766]
         }
         df = pd.DataFrame(model_data)
-        fig, ax = plt.subplots(figsize=(6, 4))
-        ax.barh(df["Model"], df["F1 Score"], color="#2196F3", alpha=0.85, label="F1 Score")
-        ax.set_xlabel("Score")
-        ax.set_title("Model F1 Score Comparison")
-        ax.set_xlim(0, 1)
-        st.pyplot(fig)
+        # fig, ax = plt.subplots(figsize=(6, 4))
+        # ax.barh(df["Model"], df["F1 Score"], color="#2196F3", alpha=0.85, label="F1 Score")
+        # ax.set_xlabel("Score")
+        # ax.set_title("Model F1 Score Comparison")
+        # ax.set_xlim(0, 1)
+        # st.pyplot(fig)
         st.caption("Deep learning models significantly outperform traditional ML on image data.")
 
     st.subheader("Detailed Model Metrics Table")
@@ -175,44 +175,44 @@ with tab2:
 
     with col3:
         st.subheader("Accuracy vs F1 Score")
-        fig, ax = plt.subplots(figsize=(6, 4))
-        ax.scatter(
-            df["Accuracy"], df["F1 Score"],
-            c=["#2196F3", "#4CAF50", "#FF9800", "#E91E63", "#9C27B0"],
-            s=200, zorder=5
-        )
-        for i, row in df.iterrows():
-            ax.annotate(
-                row["Model"],
-                (row["Accuracy"], row["F1 Score"]),
-                textcoords="offset points",
-                xytext=(5, 5),
-                fontsize=8
-            )
-        ax.set_xlabel("Accuracy")
-        ax.set_ylabel("F1 Score")
-        ax.set_title("Accuracy vs F1 Score per Model")
-        ax.plot([0.6, 1.0], [0.6, 1.0], "k--", alpha=0.3)
-        st.pyplot(fig)
+        # fig, ax = plt.subplots(figsize=(6, 4))
+        # ax.scatter(
+        #     df["Accuracy"], df["F1 Score"],
+        #     c=["#2196F3", "#4CAF50", "#FF9800", "#E91E63", "#9C27B0"],
+        #     s=200, zorder=5
+        # )
+        # for i, row in df.iterrows():
+        #     ax.annotate(
+        #         row["Model"],
+        #         (row["Accuracy"], row["F1 Score"]),
+        #         textcoords="offset points",
+        #         xytext=(5, 5),
+        #         fontsize=8
+        #     )
+        # ax.set_xlabel("Accuracy")
+        # ax.set_ylabel("F1 Score")
+        # ax.set_title("Accuracy vs F1 Score per Model")
+        # ax.plot([0.6, 1.0], [0.6, 1.0], "k--", alpha=0.3)
+        # st.pyplot(fig)
         st.caption("Models closer to the top right corner have both high accuracy and high F1 score.")
 
     with col4:
         st.subheader("AUC-ROC per Model")
-        fig, ax = plt.subplots(figsize=(6, 4))
-        colors  = ["#2196F3", "#4CAF50", "#FF9800", "#E91E63", "#9C27B0"]
-        bars    = ax.bar(df["Model"], df["AUC-ROC"], color=colors, edgecolor="black", alpha=0.85)
-        ax.set_ylabel("AUC-ROC Score")
-        ax.set_title("AUC-ROC per Model")
-        ax.set_ylim(0.6, 1.0)
-        ax.set_xticklabels(df["Model"], rotation=15, ha="right", fontsize=8)
-        for bar, val in zip(bars, df["AUC-ROC"]):
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                bar.get_height() + 0.005,
-                f"{val:.4f}",
-                ha="center", fontsize=8
-            )
-        st.pyplot(fig)
+        # fig, ax = plt.subplots(figsize=(6, 4))
+        # colors  = ["#2196F3", "#4CAF50", "#FF9800", "#E91E63", "#9C27B0"]
+        # bars    = ax.bar(df["Model"], df["AUC-ROC"], color=colors, edgecolor="black", alpha=0.85)
+        # ax.set_ylabel("AUC-ROC Score")
+        # ax.set_title("AUC-ROC per Model")
+        # ax.set_ylim(0.6, 1.0)
+        # ax.set_xticklabels(df["Model"], rotation=15, ha="right", fontsize=8)
+        # for bar, val in zip(bars, df["AUC-ROC"]):
+        #     ax.text(
+        #         bar.get_x() + bar.get_width() / 2,
+        #         bar.get_height() + 0.005,
+        #         f"{val:.4f}",
+        #         ha="center", fontsize=8
+        #     )
+        # st.pyplot(fig)
         st.caption("AUC-ROC above 0.98 indicates excellent discriminative ability.")
 
 with tab3:
