@@ -4,7 +4,6 @@ import os
 from PIL import Image
 import io
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 
 API_URL = "https://summative-mlop-yuhp.onrender.com"
