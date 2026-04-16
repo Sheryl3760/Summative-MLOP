@@ -1,12 +1,7 @@
 fastapi
 uvicorn[standard]
 python-multipart
-tensorflow==2.15.0
 scikit-learn
 numpy
 pillow
 joblib
-opencv-python-headless
-matplotlib
-seaborn
-pandas
