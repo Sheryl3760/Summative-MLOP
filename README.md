@@ -6,9 +6,9 @@
 
 ## Live Application URLs
 
-- Streamlit UI:
-- FastAPI Backend: https://summative-mlop-yuhp.onrender.com
-- API Docs: https://summative-mlop-yuhp.onrender.com/docs
+- Streamlit UI:https://malaria-ui.onrender.com
+- FastAPI Backend: https://summative-mlop-1-gwpb.onrender.com
+- API Docs: https://summative-mlop-1-gwpb.onrender.com/docs
 
 ## Project Description
 
