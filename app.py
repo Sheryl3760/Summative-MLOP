@@ -108,8 +108,47 @@ with tab1:
                     st.error("Could not connect to API")
 
 with tab2:
-    st.header("Dataset Overview")
-    st.write("Balanced dataset with Parasitized and Uninfected cells.")
+    st.header("Dataset Visualizations")
+    st.write("This section shows how the models performed on the malaria dataset.")
+
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    model_data = {
+        "Model": [
+            "Sequential CNN",
+            "Functional CNN",
+            "VGG16 Transfer",
+            "Random Forest",
+            "SVM"
+        ],
+        "F1 Score": [0.9598, 0.9549, 0.9354, 0.8073, 0.7114],
+        "Accuracy": [0.9590, 0.9539, 0.9343, 0.8135, 0.7074],
+        "AUC-ROC": [0.9895, 0.9866, 0.9833, 0.8939, 0.7766]
+    }
+
+    df = pd.DataFrame(model_data)
+
+    st.subheader("Model Comparison Table")
+    st.dataframe(df, use_container_width=True)
+
+    st.write("F1 Score comparison across models")
+
+    fig1, ax1 = plt.subplots()
+    ax1.bar(df["Model"], df["F1 Score"])
+    ax1.set_ylabel("F1 Score")
+    ax1.set_xticklabels(df["Model"], rotation=20, ha="right")
+    st.pyplot(fig1)
+
+    st.write("AUC-ROC comparison across models")
+
+    fig2, ax2 = plt.subplots()
+    ax2.bar(df["Model"], df["AUC-ROC"])
+    ax2.set_ylabel("AUC-ROC")
+    ax2.set_xticklabels(df["Model"], rotation=20, ha="right")
+    st.pyplot(fig2)
+
+    st.caption("Overall, the deep learning models performed better than the traditional ML models.")
 
 with tab3:
     st.header("Upload Data")
