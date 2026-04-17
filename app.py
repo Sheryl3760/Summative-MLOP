@@ -6,7 +6,7 @@ import io
 import pandas as pd
 import numpy as np
 
-API_URL = "https://summative-mlop-yuhp.onrender.com"
+API_URL = "https://summative-mlop-1-gwpb.onrender.com"
 
 st.set_page_config(
     page_title="Malaria Cell Classification",
